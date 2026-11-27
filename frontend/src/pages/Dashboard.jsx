@@ -25,6 +25,10 @@ const Dashboard = () => {
         setLoading(true);
         setError('');
         try {
+            if(user?.role === 'lead') {
+                setLoading('false');
+                return;
+            }
             const params = {};
             if (search.trim()) params.search = search.trim();
             if (statusFilter !== 'all') params.status = statusFilter;

@@ -1,4 +1,6 @@
 const { pool } = require('../config/db');
+const bcrypt = require('bcrypt');
+
 
 const ALLOWED_STATUSES = ['new', 'contacted', 'qualified', 'proposal', 'won', 'lost'];
 
@@ -22,6 +24,10 @@ const getLeads = async (req, res) => {
         const { search, status } = req.query;
         const conditions = [];
         const params = [];
+
+        // if(req.user.role === 'lead') {
+        //     return;
+        // }
 
         if (req.user.role === 'sales_executive') {
             conditions.push('l.assigned_to = ?');
@@ -124,6 +130,14 @@ const createLead = async (req, res) => {
                 assigneeId,
                 req.user.id,
             ]
+        );
+        
+        const password = '123456';
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await pool.execute(
+            `INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)`,
+            [name.trim(), email.trim(), hashedPassword, 'lead']
         );
 
         const createdLead = await fetchLeadById(result.insertId);

@@ -18,7 +18,9 @@ const Layout = ({ children }) => {
             : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
         }`;
 
-    const roleLabel = user?.role === 'admin' ? 'Admin' : 'Sales Executive';
+    const roleLabel =
+        user?.role === 'admin' ? 'Admin' :
+        user?.role === 'lead' ? 'Lead' :'Sales Executive';
 
     return (
         <div className="flex min-h-screen flex-col bg-white md:flex-row">
